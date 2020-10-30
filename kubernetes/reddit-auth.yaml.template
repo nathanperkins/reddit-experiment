@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: reddit-auth
+type: Opaque
+data:
+  username: ADD ME
+  password: ADD ME
+  client_id: ADD ME
+  client_secret: ADD ME

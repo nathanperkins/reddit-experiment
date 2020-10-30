@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: reddit-job
+spec:
+  template:
+    # This is the pod template
+    spec:
+      containers:
+      - name: reddit-job
+        image: localhost:5000/reddit-job
+        imagePullPolicy: "Always"
+        env:
+          - name: REDDIT_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: reddit-auth
+                key: username
+          - name: REDDIT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: reddit-auth
+                key: password
+          - name: REDDIT_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: reddit-auth
+                key: client_id
+          - name: REDDIT_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: reddit-auth
+                key: client_secret
+      restartPolicy: OnFailure
+    # The pod template ends here
