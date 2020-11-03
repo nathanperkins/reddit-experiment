@@ -1,4 +1,4 @@
-kubernetes/secrets/*.yaml
+kubernetes/secret/*.yaml
 src/reddit/reddit
 
 # Created by https://www.toptal.com/developers/gitignore/api/go,vim,visualstudiocode,macos
