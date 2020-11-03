@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: top-post-get
+spec:
+  selector:
+    matchLabels:
+      app: top-post-get
+  template:
+    metadata:
+      labels:
+        app: top-post-get
+    spec:
+      containers:
+      - name: top-post-get
+        image: localhost:5000/top-post-get
+        imagePullPolicy: "Always"
+        env:
+          - name: REDIS_ADDR
+            value: redis:6379
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80

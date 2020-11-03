@@ -14,7 +14,7 @@ fi
 cluster_name='reddit-experiment'
 clusters="$(kind get clusters)"
 if [[ "$clusters" != *"$cluster_name"* ]]; then
-    kind create cluster --name "$cluster_name" --config=kubernetes/cluster.yaml
+    kind create cluster --name "$cluster_name" --config=kubernetes/kind/cluster.yaml
 fi
 
 # connect the registry container to the kind network

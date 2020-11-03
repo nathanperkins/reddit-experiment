@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: top-post
+  name: top-post-set
 spec:
   schedule: "* * * * *"
   failedJobsHistoryLimit: 1
@@ -11,8 +11,8 @@ spec:
       template:
         spec:
           containers:
-          - name: reddit-job
-            image: localhost:5000/reddit-job
+          - name: top-post-set
+            image: localhost:5000/top-post-set
             imagePullPolicy: "Always"
             env:
               - name: REDDIT_USERNAME
