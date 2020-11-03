@@ -13,6 +13,29 @@ const (
 	userAgent = "AuthTest:v0.0 (by /u/wafflezone)"
 )
 
+type Post struct {
+	Title     string
+	Created   float32
+	Permalink string
+	Score     float32
+}
+
+func (p Post) MarshalBinary() ([]byte, error) {
+	return json.Marshal(p)
+}
+
+func (p *Post) UnmarshalBinary(b []byte) error {
+	return json.Unmarshal(b, p)
+}
+
+type Listing struct {
+	Data struct {
+		Children []struct {
+			Data Post
+		}
+	}
+}
+
 type Client struct {
 	token string
 }

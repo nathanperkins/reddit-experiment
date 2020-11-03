@@ -4,6 +4,8 @@ metadata:
   name: top-post
 spec:
   schedule: "* * * * *"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
       template:
@@ -33,4 +35,7 @@ spec:
                   secretKeyRef:
                     name: reddit-auth
                     key: client_secret
+              - name: REDIS_ADDR
+                value: redis:6379
+
           restartPolicy: OnFailure

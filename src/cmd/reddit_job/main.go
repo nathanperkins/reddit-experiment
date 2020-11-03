@@ -1,12 +1,16 @@
 package main
 
 import (
+	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
 	"net/url"
 	"os"
+	"time"
 
+	"github.com/go-redis/redis/v8"
 	"github.com/nathanperkins/reddit-experiment/src/reddit"
 )
 
@@ -28,31 +32,38 @@ func main() {
 	if !ok {
 		log.Fatalf("env var REDDIT_CLIENT_SECRET is required")
 	}
+	redisAddr, ok := os.LookupEnv("REDIS_ADDR")
+	if !ok {
+		log.Fatalf("env var REDIS_ADDR is required")
+	}
 
+	ctx := context.Background()
+
+	// Get clients for Reddit and Redis
 	client, err := reddit.New(username, password, clientID, clientSecret)
 	if err != nil {
 		panic(err)
 	}
+	rdb := redis.NewClient(&redis.Options{
+		Addr: redisAddr,
+	})
+
+	// Query Reddit for top post in politics in last hour
 	query := &url.Values{
 		"t":     {"hour"},
 		"limit": {"1"},
 	}
-	type listing struct {
-		Data struct {
-			Children []struct {
-				Data struct {
-					Title     string
-					Created   float32
-					Permalink string
-					Score     float32
-				}
-			}
-		}
-	}
-	var resp listing
+	var resp reddit.Listing
 	if err = client.Get("https://oauth.reddit.com/r/politics/top/", &resp, query); err != nil {
 		panic(err)
 	}
+
+	// Update redis.
 	post := resp.Data.Children[0].Data
-	fmt.Printf("Top post: %v\n", post)
+	if _, err := rdb.Set(ctx, "top-post", post, time.Hour).Result(); err != nil {
+		panic(err)
+	}
+	b, _ := json.Marshal(post)
+	fmt.Printf("Updated top post: %v", string(b))
+
 }
