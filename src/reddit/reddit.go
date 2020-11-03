@@ -56,8 +56,9 @@ func New(username, password, clientID, clientSecret string) (*Client, error) {
 	return &Client{token: token}, nil
 }
 
-func (c *Client) Get(endpoint string, data interface{}) error {
+func (c *Client) Get(endpoint string, data interface{}, values *url.Values) error {
 	req, _ := http.NewRequest("GET", endpoint, nil)
+	req.URL.RawQuery = values.Encode()
 	req.Header.Add("Authorization", fmt.Sprintf("bearer %s", c.token))
 	req.Header.Add("User-Agent", userAgent)
 
@@ -72,7 +73,10 @@ func (c *Client) Get(endpoint string, data interface{}) error {
 	if err != nil {
 		return err
 	}
-	if err := json.Unmarshal(b, data); err != nil {
+	if s, ok := data.(*string); ok {
+		*s = string(b)
+		return nil
+	} else if err := json.Unmarshal(b, data); err != nil {
 		return err
 	}
 

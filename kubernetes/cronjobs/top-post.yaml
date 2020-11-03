@@ -1,0 +1,36 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: top-post
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: reddit-job
+            image: localhost:5000/reddit-job
+            imagePullPolicy: "Always"
+            env:
+              - name: REDDIT_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: reddit-auth
+                    key: username
+              - name: REDDIT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: reddit-auth
+                    key: password
+              - name: REDDIT_CLIENT_ID
+                valueFrom:
+                  secretKeyRef:
+                    name: reddit-auth
+                    key: client_id
+              - name: REDDIT_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    name: reddit-auth
+                    key: client_secret
+          restartPolicy: OnFailure
