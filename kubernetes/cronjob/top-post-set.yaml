@@ -6,14 +6,19 @@ spec:
   schedule: "* * * * *"
   failedJobsHistoryLimit: 1
   successfulJobsHistoryLimit: 1
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: top-post-set
-            image: localhost:5000/top-post-set
+            image: nathanperkins/top-post-set
             imagePullPolicy: "Always"
+            resources:
+              limits:
+                memory: "128Mi"
+                cpu: "250m"
             env:
               - name: REDDIT_USERNAME
                 valueFrom:

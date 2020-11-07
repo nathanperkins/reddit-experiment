@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/go-redis/redis/v8"
+	"github.com/kylelemons/godebug/pretty"
 	"github.com/nathanperkins/reddit-experiment/src/reddit"
 )
 
@@ -45,7 +46,8 @@ func main() {
 			fmt.Fprintf(w, "failed to decode from db")
 			return
 		}
-		fmt.Fprintf(w, "Top post: %v\n", post)
+
+		fmt.Fprintf(w, "Top post: %v\n", pretty.Sprint(post))
 	})
 
 	log.Fatal(http.ListenAndServe(":80", nil))
