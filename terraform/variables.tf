@@ -6,6 +6,10 @@ variable "region" {
     description = "region"
 }
 
+variable "domain" {
+    description = "domain to assign to cluster"
+}
+
 variable "gke_location" {
     description = "gke cluster location"
 }
