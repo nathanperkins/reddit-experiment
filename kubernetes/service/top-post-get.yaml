@@ -8,4 +8,3 @@ spec:
     app: top-post-get
   ports:
   - port: 80
-    nodePort: 30000

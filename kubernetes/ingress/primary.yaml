@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: primary-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: powerful-axon-242722-reddit-ip
+    networking.gke.io/managed-certificates: reddit-cert
+    kubernetes.io/ingress.allow-http: "false"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: top-post-get
+          servicePort: 80

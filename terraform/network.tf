@@ -3,19 +3,6 @@ resource "google_compute_network" "vpc" {
     auto_create_subnetworks = false
 }
 
-resource "google_compute_firewall" "ingress-web" {
-    name = "${var.project_id}-ingress-web"
-    network = google_compute_network.vpc.name
-    direction = "INGRESS"
-
-    allow {
-        protocol = "tcp"
-        ports = [
-            "30000",
-        ]
-    }
-}
-
 resource "google_compute_firewall" "egress-web" {
     name = "${var.project_id}-egress-web"
     network = google_compute_network.vpc.name
